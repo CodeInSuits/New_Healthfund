@@ -104,9 +104,9 @@ tr.spaceUnder > td
 .prof_pic {
 	border: 1px solid #dedede; 
 	border-radius: 50px; 
-	float: left; 
+	float: center; 
 	margin-right: 20px; 
-	margin-bottom: 20px;
+	margin-bottom: 30px;
 }
 
 .fileUpload {
