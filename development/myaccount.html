@@ -19,33 +19,21 @@
     <link href="css/2-col-portfolio.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-        <!-- <script>
-            function readTextFile(file, callback) {
-                var rawFile = new XMLHttpRequest();
-                rawFile.overrideMimeType("application/json");
-                rawFile.open("GET", file, true);
-                rawFile.onreadystatechange = function() {
-                    if (rawFile.readyState === 4 && rawFile.status == "200") {
-                        callback(rawFile.responseText);
-                    }
-                }
-                rawFile.send(null);
-            }
 
-//usage:
-readTextFile("generated.json", function(text){
-    var data = JSON.parse(text);
-    console.log(data);
-});
-</script> -->
-<script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
-<script>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <link href="jquery-ui.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"> -->
+    <!-- <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+    <!-- <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="./dist/js/standalone/selectize.js"></script>
+    <script src="js/index.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+    <script>
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyDbJUBMk1sZD-XGvQFTt4VV-M10H4mZ1Ek",
@@ -56,6 +44,8 @@ readTextFile("generated.json", function(text){
 };
 firebase.initializeApp(config);
 </script>
+
+
 
 <script type="text/javascript">
 
