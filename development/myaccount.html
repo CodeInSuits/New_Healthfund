@@ -158,6 +158,15 @@ firebase.initializeApp(config);
       // [END sendpasswordemail];
   }
 
+      function signOut(){
+        firebase.auth().signOut().then(function() {
+            console.log('Signed Out');
+        }, function(error) {
+            console.error('Sign Out Error', error);
+        });
+    }
+
+
     /**
      * initApp handles setting up UI event listeners and registering Firebase auth listeners:
      *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
@@ -215,7 +224,7 @@ firebase.initializeApp(config);
         // [END_EXCLUDE]
     });
       // [END authstatelistener]
-
+      document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
       //document.getElementById('quickstart-sign-up').addEventListener('click', handleSignUp);
       //document.getElementById('quickstart-verify-email').addEventListener('click', sendEmailVerification);
       //document.getElementById('quickstart-password-reset').addEventListener('click', sendPasswordReset);
@@ -270,7 +279,7 @@ firebase.initializeApp(config);
                         <a href="about_signedin.html">About</a>
                     </li>
                     <li>
-                        <a href="#" id="quickstart-sign-in">Sign Out</a>
+                        <a href="#" id="quickstart-sign-out">Sign Out</a>
                     </li>
                 </ul>
             </div>
