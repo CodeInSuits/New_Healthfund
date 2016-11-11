@@ -45,9 +45,9 @@
             messagingSenderId: "370511046282"
         };
         firebase.initializeApp(config);
-        </script>
+    </script>
 
-        <script type="text/javascript">
+    <script type="text/javascript">
 
     /**
      * Handles the sign in button press.
@@ -176,8 +176,14 @@
         // [START_EXCLUDE silent]
         //document.getElementById('quickstart-verify-email').disabled = true;
         // [END_EXCLUDE]
+        var fullname = document.getElementById('fullname').value;
         if (user) {
-          // User is signed in.
+          user.updateProfile({
+          displayName: fullname,
+
+          //photoURL: "https://example.com/jane-q-user/profile.jpg"
+          }).then(function() {
+            // User is signed in.
           var displayName = user.displayName;
           var email = user.email;
           var emailVerified = user.emailVerified;
@@ -185,8 +191,16 @@
           var isAnonymous = user.isAnonymous;
           var uid = user.uid;
           var providerData = user.providerData;
-          console.log(displayName + email);
+          //
           window.location.href = "./home_signedin.html";
+          console.log(displayName + email + phone);
+          console.log(phone);
+          // Update successful.
+        }, function(error) {
+  // An error happened.
+          });
+          
+          
           // [START_EXCLUDE silent]
           //document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
           //document.getElementById('quickstart-sign-in').textContent = 'Sign out';
@@ -214,6 +228,10 @@
       //document.getElementById('quickstart-verify-email').addEventListener('click', sendEmailVerification);
       //document.getElementById('quickstart-password-reset').addEventListener('click', sendPasswordReset);
   }
+
+
+    
+
 
   window.onload = function() {
       initApp();
@@ -256,13 +274,6 @@
                         </tr>
                         <tr><td><br /></td></tr>
                         <tr>
-                            <td style="padding-right: 35px;">Contact Number:
-                            </td>
-                            <td><input type="text" id="contactnumber">
-                            </td>
-                        </tr>
-                        <tr><td><br /></td></tr>
-                        <tr>
                             <td>E-mail:
                             </td>
                             <td><input type="text" id="email">
@@ -283,13 +294,13 @@
                             </td>
                         </tr>
                     </table><br />
-                    Who are you?<br /><br />
+                    <!-- Who are you?<br /><br />
                     <table>
                         <td style="padding-right: 10px;"><div class="static_button">SCIENTIST</div></td>
                         <td style="padding-right: 10px;"><div class="static_button">INVESTOR</div></td>
                         <td><div class="static_button">PATIENT</div></td>
                     </tr>
-                </table>
+                </table> -->
                 <br /><br />
                 <a href="#"><div class="login_button" id="quickstart-sign-up">Sign Up</div></a><br />
                 <br />
