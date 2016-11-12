@@ -166,75 +166,127 @@ firebase.initializeApp(config);
         });
     }
 
+    function saveAccountInfo() {
+          var name_onfile = document.getElementById("name");
+          var bio_onfile = document.getElementById("bio");
+          var phone_onfile = document.getElementById("phone");
+          var skype_onfile = document.getElementById("skype");
+          var hangout_onfile = document.getElementById("hangout");
+          var collaborations_onfile = document.getElementById("collaborations");
+          var website_onfile = document.getElementById("website");
+          var linkedin_onfile = document.getElementById("linkedin");
+
+          var userID = firebase.auth().currentUser.uid;
+          var userRef = ('users/' + userID);
+
+          var postData = {
+            fullname: name_onfile.value, 
+            email: firebase.auth().currentUser.email,
+            bio: bio_onfile.value,
+            phone: phone_onfile.value,
+            skype: skype_onfile.value,
+            hangout: hangout_onfile.value,
+            collaborations: collaborations_onfile.value,
+            website: website_onfile.value,
+            linkedin: linkedin_onfile.value
+          }
+
+          var updates = {};
+          updates[userRef] = postData;
+          firebase.database().ref().update(updates);
+
+
+          alert("Your information has been saved!");
+    }
 
     /**
      * initApp handles setting up UI event listeners and registering Firebase auth listeners:
      *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
      *    out, and that is where we update the UI.
      */
-     function initApp() {
+    function initApp() {
       // Listening for auth state changes.
       // [START authstatelistener]
       firebase.auth().onAuthStateChanged(function(user) {
-        // [START_EXCLUDE silent]
-        //document.getElementById('quickstart-verify-email').disabled = true;
-        // [END_EXCLUDE]
+
         if (user) {
           // User is signed in.
-          var displayName = user.displayName;
+          var userID = user.uid;
           var email = user.email;
-          var emailVerified = user.emailVerified;
-          var photoURL = user.photoURL;
-          var isAnonymous = user.isAnonymous;
-          var uid = user.uid;
-          var providerData = user.providerData;
+          var userRef = firebase.database().ref('users/' + userID);
 
-          console.log(displayName);
+          var name_onfile = document.getElementById("name");
+          var bio_onfile = document.getElementById("bio");
+          var email_onfile = document.getElementById("email");
+          var phone_onfile = document.getElementById("phone");
+          var skype_onfile = document.getElementById("skype");
+          var hangout_onfile = document.getElementById("hangout");
+          var collaborations_onfile = document.getElementById("collaborations");
+          var website_onfile = document.getElementById("website");
+          var linkedin_onfile = document.getElementById("linkedin");
+          //var cv_onfile = document.getElementById("name");
 
-          document.getElementById("name").value = displayName;
-          document.getElementById("email").value = email;
-    // document.getElementById("number").value = json[0].phone;
-    // document.getElementById("skype").value = json[0].skype_id;
-    // document.getElementById("hangout").value = json[0].google_id;
-    // document.getElementById("poster").value = json[0].poster;
-    // document.getElementById("collaborations").value = json[0].friends[0].name + '/' + json[0].friends[1].name + '/'+json[0].friends[2].name ;
-    // document.getElementById("video").value = json[0].video;
-    // document.getElementById("bio").value = json[0].about;
-    // document.getElementById("website").value = json[0].website;
-    // document.getElementById("linkedin").value = json[0].linkedurl;
+          userRef.on('value', function(snapshot) {
+            var fullName = snapshot.val().fullname;
+            if (fullName != null)
+              name_onfile.value = fullName;
+            else
+              name_onfile.value = "Enter your name here";
+            
+            var shortBio = snapshot.val().bio;
+            if (shortBio != null)
+              bio_onfile.value = shortBio;
+            else
+              bio_onfile.value = "Write something about yourself here";
 
-          // [START_EXCLUDE silent]
-          //document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
-          //document.getElementById('quickstart-sign-in').textContent = 'Sign out';
-          //document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
-          if (!emailVerified) {
-            //document.getElementById('quickstart-verify-email').disabled = false;
+            email_onfile.value = email;
+
+            var phoneNumber = snapshot.val().phone;
+            if (phoneNumber != null)
+              phone_onfile.value = phoneNumber;
+            else
+              phone_onfile.value = "Enter your phone number here";
+            
+            var skype = snapshot.val().skype;
+            if (skype != null)
+              skype_onfile.value = skype;
+            else
+              skype_onfile.value = "Enter your skype ID here";
+            
+            var hangout = snapshot.val().hangout;
+            if (hangout != null)
+              hangout_onfile.value = hangout;
+            else
+              hangout_onfile.value = "Enter your Google Hangout ID here";
+            
+            var collaborations = snapshot.val().collaborations;
+            if (collaborations != null)
+              collaborations_onfile.value = collaborations;
+            else
+              collaborations_onfile.value = "Enter a list of your collaborations here";
+            
+            var website = snapshot.val().website;
+            if (website != null)
+              website_onfile.value = website;
+            else
+              website_onfile.value = "Enter your website URL here";
+            
+            var linkedin = snapshot.val().linkedin;
+            if (linkedin != null)
+              linkedin_onfile.value = linkedin;
+            else
+              linkedin_onfile.value = "Enter your linkedin URL here";
+          });
+
+        } else {
+            // User is signed out.
+            window.location.href = "../index.html";
         }
-          // [END_EXCLUDE]
-      } else {
-          // User is signed out.
-          // [START_EXCLUDE silent]
-          //document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
-          //document.getElementById('quickstart-sign-in').textContent = 'Sign in';
-          //document.getElementById('quickstart-account-details').textContent = 'null';
-          // [END_EXCLUDE]
-      }
-        // [START_EXCLUDE silent]
-        //document.getElementById('quickstart-sign-in').disabled = false;
-        // [END_EXCLUDE]
-    });
+      });
       // [END authstatelistener]
       document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
-      //document.getElementById('quickstart-sign-up').addEventListener('click', handleSignUp);
-      //document.getElementById('quickstart-verify-email').addEventListener('click', sendEmailVerification);
-      //document.getElementById('quickstart-password-reset').addEventListener('click', sendPasswordReset);
-  }
-
-  function writeUserData(userId, email) {
-      firebase.database().ref('users/' + userId).set({
-        email: email
-    });
-  }
+      document.getElementById('quickstart-save-profile').addEventListener('click', saveAccountInfo);
+    }
 
 
   window.onload = function() {
@@ -317,56 +369,47 @@ firebase.initializeApp(config);
                     <table>
                         <tr class="spaceUnder">
                             <td>Name:</td>
-                            <td><input type="text" id="name" disabled="true" name="fullname" value="{{name}}"></td>
+                            <td><input type="text" id="name" disabled="true" name="fullname" value=""></td>
                         </tr>
                         <tr class="spaceUnder">
                             <td>Short Bio (250 characters)</td>
-                            <td><textarea name="bio" id="bio" disabled="true">{{bio}}</textarea></td>
+                            <td><textarea name="bio" id="bio" disabled="true"></textarea></td>
 
                         </tr>
                         <tr class="spaceUnder">
                             <td>E-mail Address:</td>
-                            <td><input type="text" id="email" name="email" value="{{emailaddress}}" disabled="true"></td>
+                            <td><input type="text" id="email" name="email" value="" disabled="true"></td>
                             
                         </tr>
                         <tr class="spaceUnder">
                             <td>Phone Number:</td>
-                            <td><input type="text" name="number" id="number" value="{{number}}" disabled="true"></td>
+                            <td><input type="text" name="number" id="phone" value="" disabled="true"></td>
 
                         </tr>
                         <tr class="spaceUnder">
                             <td>Skype ID:</td>
-                            <td><input type="text" name="skype" id="skype" value="{{skype}}" disabled="true"></td>
+                            <td><input type="text" name="skype" id="skype" value="" disabled="true"></td>
 
                         </tr>
                         <tr class="spaceUnder">
                             <td>Google Hangout ID:</td>
-                            <td><input type="text" name="hangout" id="hangout" value="{{hangout}}" disabled="true"></td>
-
-                        </tr>
-                        <tr class="spaceUnder">
-                            <td>Poster Records:</td>
-                            <td><input type="text" name="hangout" id="poster" value="{{poster records}}" disabled="true"></td>
+                            <td><input type="text" name="hangout" id="hangout" value="" disabled="true"></td>
 
                         </tr>
                         <tr class="spaceUnder">
                             <td>Collaborations</td>
-                            <td><input type="text" name="hangout" id="collaborations" value="{{collaborations}}" disabled="true"></td>
+                            <td><input type="text" name="hangout" id="collaborations" value="" disabled="true"></td>
 
                         </tr>
-                        <tr class="spaceUnder">
-                            <td>Pitching Videos</td>
-                            <td><input type="text" name="hangout" id="video" value="{{pitching videos}}" disabled="true"></td>
 
-                        </tr>
                         <tr class="spaceUnder">
                             <td>Website URL:</td>
-                            <td><input type="text" name="website" id="website" value="{{website}}" disabled="true"></td>
+                            <td><input type="text" name="website" id="website" value="" disabled="true"></td>
 
                         </tr>
                         <tr class="spaceUnder">
                             <td>LinkedIn URL:</td>
-                            <td><input type="text" name="linkedin" id="linkedin" value="{{linkedin}}" disabled="true"></td>
+                            <td><input type="text" name="linkedin" id="linkedin" value="" disabled="true"></td>
 
                         </tr>
                         <tr class="spaceUnder">
@@ -381,46 +424,13 @@ firebase.initializeApp(config);
                         </tr>
                     </table>
                     <br />
-                    <div style="margin-left: 37.5%"><a href="#"><div class="login_button">SAVE</div></a></div>
+                    <div style="margin-left: 37.5%"><a href="#"><div id="quickstart-save-profile" class="login_button">SAVE</div></a></div>
                 </div>
             </div>
         </div> 
 
     </div>
     <!-- /.container -->
-<!--     <script>
-    var json = (function() {
-        var json = null;
-        $.ajax({
-            'async': false,
-            'global': false,
-            'url': "./generated.json",
-            'dataType': "json",
-            'success': function (data) {
-                json = data;
-            }
-        });
-        return json;
-    })();
-
-    console.log(json)
-    console.log(json[0].website)
-    var image = document.getElementById("profileimage");
-    image.src = json[0].picture
-    document.getElementById("name").value = json[0].name.first + ' ' + json[0].name.last;
-    document.getElementById("email").value = json[0].email;
-    document.getElementById("number").value = json[0].phone;
-    document.getElementById("skype").value = json[0].skype_id;
-    document.getElementById("hangout").value = json[0].google_id;
-    document.getElementById("poster").value = json[0].poster;
-    document.getElementById("collaborations").value = json[0].friends[0].name + '/' + json[0].friends[1].name + '/'+json[0].friends[2].name ;
-    document.getElementById("video").value = json[0].video;
-    document.getElementById("bio").value = json[0].about;
-    document.getElementById("website").value = json[0].website;
-    document.getElementById("linkedin").value = json[0].linkedurl;
-    console.log();
-</script> -->
-
 
 <script type="text/javascript">
     document.getElementById("uploadBtn").onchange = function () {
@@ -432,17 +442,14 @@ firebase.initializeApp(config);
     function enableField()
     {
         document.getElementById("name").disabled = false;
-        document.getElementById("email").value = false;
-        /*
-        document.getElementById("number").value = json[0].phone;
-        document.getElementById("skype").value = json[0].skype_id;
-        document.getElementById("hangout").value = json[0].google_id;
-        document.getElementById("poster").value = json[0].poster;
-        document.getElementById("collaborations").value = json[0].friends[0].name + '/' + json[0].friends[1].name + '/'+json[0].friends[2].name ;
-        document.getElementById("video").value = json[0].video;
-        document.getElementById("bio").value = json[0].about;
-        document.getElementById("website").value = json[0].website;
-        document.getElementById("linkedin").value = json[0].linkedurl;*/
+        document.getElementById("bio").disabled = false;
+        document.getElementById("phone").disabled = false;
+        document.getElementById("skype").disabled = false;
+        document.getElementById("hangout").disabled = false;
+        document.getElementById("collaborations").disabled = false;
+        document.getElementById("website").disabled = false;
+        document.getElementById("linkedin").disabled = false;
+        document.getElementById("uploadFile").disabled = false;
     }
 
     function save()

@@ -18,15 +18,215 @@
     <link href="css/2-col-portfolio.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <link href="jquery-ui.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"> -->
+    <!-- <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+    <!-- <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="./dist/js/standalone/selectize.js"></script>
+    <script src="js/index.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+    <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDbJUBMk1sZD-XGvQFTt4VV-M10H4mZ1Ek",
+    authDomain: "healthfund-2d39b.firebaseapp.com",
+    databaseURL: "https://healthfund-2d39b.firebaseio.com",
+    storageBucket: "healthfund-2d39b.appspot.com",
+    messagingSenderId: "370511046282"
+};
+firebase.initializeApp(config);
+</script>
+
+
+
+<script type="text/javascript">
+
+    /**
+     * Handles the sign in button press.
+     */
+     function toggleSignIn() {
+      if (firebase.auth().currentUser) {
+        // [START signout]
+        firebase.auth().signOut();
+        // [END signout]
+    } else {
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        if (email.length < 4) {
+          alert('Please enter an email address.');
+          return;
+      }
+      if (password.length < 4) {
+          alert('Please enter a password.');
+          return;
+      }
+        // Sign in with email and pass.
+        // [START authwithemail]
+        firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // [START_EXCLUDE]
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password.');
+        } else {
+            alert(errorMessage);
+        }
+        console.log(error);
+          // [END_EXCLUDE]
+      });
+        // [END authwithemail]
+    }
+
+}
+
+    /**
+     * Handles the sign up button press.
+     */
+     function handleSignUp() {
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+      if (email.length < 4) {
+        alert('Please enter an email address.');
+        return;
+    }
+    if (password.length < 4) {
+        alert('Please enter a password.');
+        return;
+    }
+      // Sign in with email and pass.
+      // [START createwithemail]
+      firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // [START_EXCLUDE]
+        if (errorCode == 'auth/weak-password') {
+          alert('The password is too weak.');
+      } else {
+          alert(errorMessage);
+      }
+      console.log(error);
+        // [END_EXCLUDE]
+    });
+      // [END createwithemail]
+  }
+
+    /**
+     * Sends an email verification to the user.
+     */
+     function sendEmailVerification() {
+      // [START sendemailverification]
+      firebase.auth().currentUser.sendEmailVerification().then(function() {
+        // Email Verification sent!
+        // [START_EXCLUDE]
+        alert('Email Verification Sent!');
+        // [END_EXCLUDE]
+    });
+      // [END sendemailverification]
+  }
+
+  function sendPasswordReset() {
+      var email = document.getElementById('email').value;
+      // [START sendpasswordemail]
+      firebase.auth().sendPasswordResetEmail(email).then(function() {
+        // Password Reset Email Sent!
+        // [START_EXCLUDE]
+        alert('Password Reset Email Sent!');
+        // [END_EXCLUDE]
+    }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // [START_EXCLUDE]
+        if (errorCode == 'auth/invalid-email') {
+          alert(errorMessage);
+      } else if (errorCode == 'auth/user-not-found') {
+          alert(errorMessage);
+      }
+      console.log(error);
+        // [END_EXCLUDE]
+    });
+      // [END sendpasswordemail];
+  }
+
+      function signOut(){
+        firebase.auth().signOut().then(function() {
+            console.log('Signed Out');
+        }, function(error) {
+            console.error('Sign Out Error', error);
+        });
+    }
+
+    function saveProjectInfo() {
+          var title = document.getElementById("title");
+          var description = document.getElementById("description");
+          var context = document.getElementById("context");
+          var significance = document.getElementById("significance");
+          var goals = document.getElementById("goals");
+          var collaborators = document.getElementById("collaborators");
+
+          var userID = firebase.auth().currentUser.uid;
+          var userRef = ('users/' + userID + '/projects');
+
+          var projRef = ('projects/');
+
+          var newProjRef = projRef.push();
+          newProjRef.set({
+            title: title.value, 
+            description: description.value,
+            context: context.value,
+            significance: significance.value,
+            goals: goals.value,
+            collaborators: collaborators.value,
+            author: userID
+          });
+
+          var projID = newProjRef.key;
+
+          userRef.push(projID);
+
+          alert("Your project has been created!");
+    }
+
+    /**
+     * initApp handles setting up UI event listeners and registering Firebase auth listeners:
+     *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
+     *    out, and that is where we update the UI.
+     */
+    function initApp() {
+      // Listening for auth state changes.
+      // [START authstatelistener]
+      firebase.auth().onAuthStateChanged(function(user) {
+
+        if (user) {
+          // User is signed in.
+          var userID = user.uid;
+          var email = user.email;
+          var userRef = firebase.database().ref('users/' + userID);
+        } else {
+            // User is signed out.
+            window.location.href = "../index.html";
+        }
+      });
+      // [END authstatelistener]
+      document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
+      document.getElementById('quickstart-save-project').addEventListener('click', saveProjectInfo);
+    }
+
+
+  window.onload = function() {
+      initApp();
+  };
+</script>
 </head>
-
 <body>
 
     <!-- Navigation -->
@@ -62,7 +262,7 @@
                         <a href="about_signedin.html">About</a>
                     </li>
                     <li>
-                        <a href="#" id="quickstart-sign-in">Sign Out</a>
+                        <a href="#" id="quickstart-sign-out">Sign Out</a>
                     </li>
                 </ul>
             </div>
@@ -102,7 +302,47 @@
                     Description: 
                 </td>
                 <td>
-                    <textarea rows="4" cols="40"></textarea>
+                    <textarea name="description" rows="4" cols="40"></textarea>
+                </td>
+            </tr>
+            <tr><td><br /></td></tr>
+            <tr>
+                <td style="padding-right: 20px;">
+                    Context of Research: 
+                </td>
+                <td>
+                    <textarea name="context" rows="4" cols="40"></textarea>
+                </td>
+            </tr>
+            <tr><td><br /></td></tr>
+            <tr>
+                <td style="padding-right: 20px;">
+                    Significance: 
+                </td>
+                <td>
+                    <textarea name="significance" rows="4" cols="40"></textarea>
+                </td>
+            </tr>
+            <tr><td><br /></td></tr>
+            <tr>
+                <td style="padding-right: 20px;">
+                    Goals of this project: 
+                </td>
+                <td>
+                    <textarea rows="4" name="goals" cols="40"></textarea>
+                </td>
+            </tr>
+            <tr><td><br /></td></tr>
+            <tr>
+                <td style="padding-right: 20px;">
+                    Project Image: 
+                </td>
+                <td>
+                    <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
+                    <div class="fileUpload btn btn-primary">
+                        <span>Upload</span>
+                        <input id="uploadBtn" type="file" class="upload" />
+                    </div>
                 </td>
             </tr>
             <tr><td><br /></td></tr>
@@ -111,22 +351,11 @@
                     Collaborators: 
                 </td>
                 <td>
-                    <input type="text" name="collabs" size="37">
+                    <input type="text" name="collaborators" size="37">
                 </td>
             </tr>
             <tr><td><br /></td></tr>
-            <tr>
-                <td style="padding-right: 20px;">
-                    Poster Copies: 
-                </td>
-                <td>
-                    <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
-                            <div class="fileUpload btn btn-primary">
-                                <span>Upload</span>
-                                <input id="uploadBtn" type="file" class="upload" />
-                            </div>
-                </td>
-            </tr>
+            <!--
             <tr><td><br /></td></tr>
             <tr>
                 <td style="padding-right: 20px;">
@@ -134,15 +363,16 @@
                 </td>
                 <td>
                     <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
-                            <div class="fileUpload btn btn-primary">
-                                <span>Upload</span>
-                                <input id="uploadBtn" type="file" class="upload" />
-                            </div>
+                    <div class="fileUpload btn btn-primary">
+                        <span>Upload</span>
+                        <input id="uploadBtn" type="file" class="upload" />
+                    </div>
                 </td>
             </tr>
+            -->
         </table>
                 <br /><br />
-                <center><a href="myprojects.html"><div class="login_button">SUBMIT</div></a><br /></center>            </div>
+                <center><a href="myprojects.html"><div class="login_button" id="quickstart-save-project">SUBMIT</div></a><br /></center>            </div>
         </div>
 
     </div>
