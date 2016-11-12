@@ -3,61 +3,61 @@
 
 <head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <title>HealthFund | Connecting Researchers with Investors and Patients</title>
+  <title>HealthFund | Connecting Researchers with Investors and Patients</title>
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-    <!-- Custom CSS -->
-    <link href="css/2-col-portfolio.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
-
-
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/stylesheet.css">
-    <link href="jquery-ui.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"> -->
-    <!-- <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
-    <!-- <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <script src="js/jquery.min.js"></script>
-    <script src="./dist/js/standalone/selectize.js"></script>
-    <script src="js/index.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
-    <script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyDbJUBMk1sZD-XGvQFTt4VV-M10H4mZ1Ek",
-    authDomain: "healthfund-2d39b.firebaseapp.com",
-    databaseURL: "https://healthfund-2d39b.firebaseio.com",
-    storageBucket: "healthfund-2d39b.appspot.com",
-    messagingSenderId: "370511046282"
-};
-firebase.initializeApp(config);
-</script>
+  <!-- Bootstrap Core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+  <!-- Custom CSS -->
+  <link href="css/2-col-portfolio.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
 
 
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/stylesheet.css">
+  <link href="jquery-ui.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"> -->
+  <!-- <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+  <!-- <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script type="text/javascript">
+  <script src="js/jquery.min.js"></script>
+  <script src="./dist/js/standalone/selectize.js"></script>
+  <script src="js/index.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDbJUBMk1sZD-XGvQFTt4VV-M10H4mZ1Ek",
+      authDomain: "healthfund-2d39b.firebaseapp.com",
+      databaseURL: "https://healthfund-2d39b.firebaseio.com",
+      storageBucket: "healthfund-2d39b.appspot.com",
+      messagingSenderId: "370511046282"
+    };
+    firebase.initializeApp(config);
+  </script>
+
+
+
+  <script type="text/javascript">
 
     /**
      * Handles the sign in button press.
      */
-     function toggleSignIn() {
+    function toggleSignIn() {
       if (firebase.auth().currentUser) {
         // [START signout]
         firebase.auth().signOut();
         // [END signout]
-    } else {
+      } else {
         var email = document.getElementById('email').value;
         var password = document.getElementById('password').value;
         if (email.length < 4) {
@@ -68,40 +68,40 @@ firebase.initializeApp(config);
           alert('Please enter a password.');
           return;
       }
-        // Sign in with email and pass.
-        // [START authwithemail]
-        firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // [START_EXCLUDE]
-          if (errorCode === 'auth/wrong-password') {
-            alert('Wrong password.');
+      // Sign in with email and pass.
+      // [START authwithemail]
+      firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // [START_EXCLUDE]
+        if (errorCode === 'auth/wrong-password') {
+          alert('Wrong password.');
         } else {
             alert(errorMessage);
         }
         console.log(error);
-          // [END_EXCLUDE]
+        // [END_EXCLUDE]
       });
-        // [END authwithemail]
-    }
+      // [END authwithemail]
+      }
 
-}
+    }
 
     /**
      * Handles the sign up button press.
      */
-     function handleSignUp() {
+    function handleSignUp() {
       var email = document.getElementById('email').value;
       var password = document.getElementById('password').value;
       if (email.length < 4) {
         alert('Please enter an email address.');
         return;
-    }
-    if (password.length < 4) {
-        alert('Please enter a password.');
-        return;
-    }
+      }
+      if (password.length < 4) {
+          alert('Please enter a password.');
+          return;
+      }
       // Sign in with email and pass.
       // [START createwithemail]
       firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
@@ -116,25 +116,25 @@ firebase.initializeApp(config);
       }
       console.log(error);
         // [END_EXCLUDE]
-    });
+      });
       // [END createwithemail]
-  }
+    }
 
     /**
      * Sends an email verification to the user.
      */
-     function sendEmailVerification() {
+    function sendEmailVerification() {
       // [START sendemailverification]
       firebase.auth().currentUser.sendEmailVerification().then(function() {
         // Email Verification sent!
         // [START_EXCLUDE]
         alert('Email Verification Sent!');
         // [END_EXCLUDE]
-    });
+      });
       // [END sendemailverification]
-  }
+    }
 
-  function sendPasswordReset() {
+    function sendPasswordReset() {
       var email = document.getElementById('email').value;
       // [START sendpasswordemail]
       firebase.auth().sendPasswordResetEmail(email).then(function() {
@@ -142,61 +142,57 @@ firebase.initializeApp(config);
         // [START_EXCLUDE]
         alert('Password Reset Email Sent!');
         // [END_EXCLUDE]
-    }).catch(function(error) {
+      }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
         // [START_EXCLUDE]
         if (errorCode == 'auth/invalid-email') {
           alert(errorMessage);
-      } else if (errorCode == 'auth/user-not-found') {
+        } else if (errorCode == 'auth/user-not-found') {
           alert(errorMessage);
-      }
-      console.log(error);
+        }
+        console.log(error);
         // [END_EXCLUDE]
-    });
+      });
       // [END sendpasswordemail];
-  }
+    }
 
-      function signOut(){
-        firebase.auth().signOut().then(function() {
-            console.log('Signed Out');
-        }, function(error) {
-            console.error('Sign Out Error', error);
-        });
+    function signOut(){
+      firebase.auth().signOut().then(function() {
+          console.log('Signed Out');
+      }, function(error) {
+          console.error('Sign Out Error', error);
+      });
     }
 
     function saveAccountInfo() {
-          var name_onfile = document.getElementById("name");
-          var bio_onfile = document.getElementById("bio");
-          var phone_onfile = document.getElementById("phone");
-          var skype_onfile = document.getElementById("skype");
-          var hangout_onfile = document.getElementById("hangout");
-          var collaborations_onfile = document.getElementById("collaborations");
-          var website_onfile = document.getElementById("website");
-          var linkedin_onfile = document.getElementById("linkedin");
+      var name_onfile = document.getElementById("name");
+      var bio_onfile = document.getElementById("bio");
+      var phone_onfile = document.getElementById("phone");
+      var skype_onfile = document.getElementById("skype");
+      var hangout_onfile = document.getElementById("hangout");
+      var collaborations_onfile = document.getElementById("collaborations");
+      var website_onfile = document.getElementById("website");
+      var linkedin_onfile = document.getElementById("linkedin");
 
-          var userID = firebase.auth().currentUser.uid;
-          var userRef = ('users/' + userID);
+      var userID = firebase.auth().currentUser.uid;
+      var userRef = firebase.database().ref('users/' + userID);
 
-          var postData = {
-            fullname: name_onfile.value, 
-            email: firebase.auth().currentUser.email,
-            bio: bio_onfile.value,
-            phone: phone_onfile.value,
-            skype: skype_onfile.value,
-            hangout: hangout_onfile.value,
-            collaborations: collaborations_onfile.value,
-            website: website_onfile.value,
-            linkedin: linkedin_onfile.value
-          }
-
-          var updates = {};
-          updates[userRef] = postData;
-          firebase.database().ref().update(updates);
+      userRef.update({
+        fullname: name_onfile.value, 
+        email: firebase.auth().currentUser.email,
+        bio: bio_onfile.value,
+        phone: phone_onfile.value,
+        skype: skype_onfile.value,
+        hangout: hangout_onfile.value,
+        collaborations: collaborations_onfile.value,
+        website: website_onfile.value,
+        linkedin: linkedin_onfile.value
+      });
 
 
-          alert("Your information has been saved!");
+      alert("Your information has been saved!");
     }
 
     /**
@@ -279,8 +275,6 @@ firebase.initializeApp(config);
           });
 
         } else {
-            // User is signed out.
-            window.location.href = "../index.html";
         }
       });
       // [END authstatelistener]
@@ -288,15 +282,11 @@ firebase.initializeApp(config);
       document.getElementById('quickstart-save-profile').addEventListener('click', saveAccountInfo);
     }
 
-
   window.onload = function() {
       initApp();
   };
 </script>
-
-
 </head>
-
 <body>
 
     <!-- Navigation -->

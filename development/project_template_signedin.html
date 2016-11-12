@@ -11,19 +11,98 @@
 
     <title>HealthFund | Connecting Researchers with Investors and Patients</title>
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="css/2-col-portfolio.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="css/2-col-portfolio.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/stylesheet.css">
+  <link href="jquery-ui.css" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script src="js/jquery.min.js"></script>
+  <script src="./dist/js/standalone/selectize.js"></script>
+  <script src="js/index.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDbJUBMk1sZD-XGvQFTt4VV-M10H4mZ1Ek",
+      authDomain: "healthfund-2d39b.firebaseapp.com",
+      databaseURL: "https://healthfund-2d39b.firebaseio.com",
+      storageBucket: "healthfund-2d39b.appspot.com",
+      messagingSenderId: "370511046282"
+    };
+    firebase.initializeApp(config);
+  </script>
+
+  <script>
+
+  function signOut(){
+      firebase.auth().signOut().then(function() {
+          console.log('Signed Out');
+      }, function(error) {
+          console.error('Sign Out Error', error);
+      });
+  }
+
+  function initApp() {
+    // Listening for auth state changes.
+    // [START authstatelistener]
+    firebase.auth().onAuthStateChanged(function(user) {
+      // [START_EXCLUDE silent]
+      // [END_EXCLUDE]
+      if (user) {
+        // User is signed in.
+        var userID = user.uid;
+        var email = user.email;
+        var userRef = firebase.database().ref('users/' + userID + '/projects').orderByKey();
+
+
+        var projectList = document.getElementById("div1");
+
+        userRef.once("value")
+          .then(function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+
+              var projectID = childSnapshot.val();
+              
+              var projRef = firebase.database().ref('projects/' + projectID).orderByKey();
+              projRef.on('value', function(snapshot) {
+                var projectTitle = snapshot.child("title").val();
+
+                var x = document.createElement("LI");
+                var link = document.createElement("a");
+                var node = document.createTextNode(projectTitle);
+
+                link.href="#";
+
+                x.appendChild(link);
+                link.appendChild(node);
+                projectList.appendChild(x);
+
+              });
+
+          });
+        }); 
+      } else {
+      }
+        // [START_EXCLUDE silent]
+        // [END_EXCLUDE]
+    });
+      // [END authstatelistener]
+    document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
+  }
+
+  window.onload = function() {
+      initApp();
+  };
+</script>
 
 </head>
 
@@ -44,7 +123,7 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+                    <ul class="nav navbar-nav">
                     <li>
                         <a href="home_signedin.html">Home</a>
                     </li>
@@ -61,7 +140,7 @@
                         <a href="about_signedin.html">About</a>
                     </li>
                     <li>
-                        <a href="index.html">Sign Out</a>
+                        <a href="#" id="quickstart-sign-out">Sign Out</a>
                     </li>
                 </ul>
             </div>
@@ -85,18 +164,11 @@
         <!-- Projects Row -->
 
         <div class="row">
-            <div class="col-lg-12">
+            <div id="project-image" class="col-lg-12">
             <div class="project_image"><img src="images/mortality.jpg" alt="" style="max-height: 200px;" /> </div>    
             <hr>
             </div>
-            <div class="col-lg-12">
-                <h4>Video Pitch</h4>      
-                <center>
-                    <iframe src="https://player.vimeo.com/video/113355284?color=f6694b&title=0&byline=0&portrait=0" width="300" height="169" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                </center>
-                <hr>
-            </div>
-                        <div class="col-lg-12">
+            <div id="project-writeup" class="col-lg-12">
                 <h4>Description</h4>      
                 <p>Maternal and child mortality in Southeast Asian countries is still very high, especially in poor and rural areas. The goal of our study is to develop user-friendly mathematical model to improve referral of high-risk term pregnancies in resource-poor settings; creating a more resource-efficient health system, while delivering better health outcomes to mothers and children. <br /><br />
                 <b>Context of This Research</b><br />
@@ -121,31 +193,31 @@
                 The lack of resources and advanced facilities’ setting, make it even more important to be able to detect high risk pregnancies with accurate and efficient formula, which is fundamental for high quality antenatal care.</p> 
                 <hr>
             </div>
-            <div class="col-lg-12">
+            <div id="funds-received" class="col-lg-12">
                 <h4>Funds Received</h4>      
                 <div class="progress">
                   <div class="progress-bar" role="progressbar" aria-valuenow="40"
                   aria-valuemin="0" aria-valuemax="100" style="width:40%">
-                    $3000
+                    $7000
                   </div>
 
                 </div>
 
-                <div style="float: left;">$100</div><div style="float: right">$10,000+</div><br />
+                <div style="float: left;">$0</div><div style="float: right">$25,000+</div><br />
                 <hr>
             </div>
-            <div class="col-lg-12">
+            <div id="project-authors" class="col-lg-12">
                 <h4>Authors</h4>      
                 <p><a href="LINK TO THER PROFILE">Christian Suharlim</a> and <a href="LINK TO THEIR PROFILE">Novita Liman</a></p>
             <hr>
             </div>
-            <div class="col-lg-12">
+            <div id="project-collaborators" class="col-lg-12">
                 <h4>Collaborators</h4>      
                 <p><a href="LINK TO THER PROFILE">Denny Luan</a>, <a href="LINK TO THER PROFILE">Seawris Pinnan</a>, <a href="LINK TO THER PROFILE">Andrew Wong</a>, Dana Rye, Stella Margaretha</p> 
                 <!-- SOME USERS MAY NOT HAVE PROFILES ON THIS APP SO NO LINK FOR THEM! -->
                 <hr>
             </div>
-            <div class="col-lg-12">
+            <div id="how-to-donate" class="col-lg-12">
                 <h4>How To Donate?</h4> 
                 <p>We believe that investors and donors might feel more secure if they pay the researchers and scientists directly, instead of paying through a third party website. You can read more about the authors by clicking on their names above and finding their contact information on their profiles. If their work has interested you, feel free to reach out to them to discuss this project and any donations you'd like to make.</p>   
             </div>

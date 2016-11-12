@@ -10,20 +10,65 @@
     <meta name="author" content="">
 
     <title>HealthFund | Connecting Researchers with Investors and Patients</title>
+  <!-- Bootstrap Core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="css/2-col-portfolio.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="css/2-col-portfolio.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/stylesheet.css">
+  <link href="jquery-ui.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"> -->
+  <!-- <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+  <!-- <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script src="js/jquery.min.js"></script>
+  <script src="./dist/js/standalone/selectize.js"></script>
+  <script src="js/index.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDbJUBMk1sZD-XGvQFTt4VV-M10H4mZ1Ek",
+      authDomain: "healthfund-2d39b.firebaseapp.com",
+      databaseURL: "https://healthfund-2d39b.firebaseio.com",
+      storageBucket: "healthfund-2d39b.appspot.com",
+      messagingSenderId: "370511046282"
+    };
+    firebase.initializeApp(config);
+  </script>
+  <script>
+    function signOut(){
+        firebase.auth().signOut().then(function() {
+            console.log('Signed Out');
+        }, function(error) {
+            console.error('Sign Out Error', error);
+        });
+    }
+
+
+    function initApp() {
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // [END_EXCLUDE]
+        } else {
+          // User is signed out.
+              window.location.href = "../index.html";
+        }
+      });
+          // [END authstatelistener]
+      document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
+    }
+
+    window.onload = function() {
+      initApp();
+    };
+  </script>
 
 </head>
 

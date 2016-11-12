@@ -21,9 +21,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/stylesheet.css">
     <link href="jquery-ui.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"> -->
-    <!-- <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
-    <!-- <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
@@ -54,53 +52,16 @@
     }
 
      function initApp() {
-      // Listening for auth state changes.
-      // [START authstatelistener]
+
       firebase.auth().onAuthStateChanged(function(user) {
-        // [START_EXCLUDE silent]
-        //document.getElementById('quickstart-verify-email').disabled = true;
-        // [END_EXCLUDE]
         if (user) {
-          // User is signed in.
-          var displayName = user.displayName;
-          var email = user.email;
-          console.log(displayName + email);
-          writeUserData(uid,email,displayName);
-          // [START_EXCLUDE silent]
-          //document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
-          //document.getElementById('quickstart-sign-in').textContent = 'Sign out';
-          //document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
-          if (!emailVerified) {
-            //document.getElementById('quickstart-verify-email').disabled = false;
+        } else {
         }
-          // [END_EXCLUDE]
-      } else {
-          // User is signed out.
-          window.location.href = "../index.html";
-          // [START_EXCLUDE silent]
-          //document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
-          //document.getElementById('quickstart-sign-in').textContent = 'Sign in';
-          //document.getElementById('quickstart-account-details').textContent = 'null';
-          // [END_EXCLUDE]
-      }
-        // [START_EXCLUDE silent]
-        //document.getElementById('quickstart-sign-in').disabled = false;
-        // [END_EXCLUDE]
-    });
+
+      });
       // [END authstatelistener]
       document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
-      //document.getElementById('quickstart-sign-up').addEventListener('click', handleSignUp);
-      //document.getElementById('quickstart-verify-email').addEventListener('click', sendEmailVerification);
-      //document.getElementById('quickstart-password-reset').addEventListener('click', sendPasswordReset);
   }
-
-  function writeUserData(userId, email, fullname) {
-      firebase.database().ref('users/' + userId).set({
-        email: email,
-        displayName: fullname
-  });
-  }
-
 
   window.onload = function() {
       initApp();
