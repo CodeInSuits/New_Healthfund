@@ -3,113 +3,117 @@
 
 <head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <title>HealthFund | Connecting Researchers with Investors and Patients</title>
+  <title>HealthFund | Connecting Researchers with Investors and Patients</title>
 
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="css/2-col-portfolio.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="css/2-col-portfolio.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/stylesheet.css">
+  <link href="jquery-ui.css" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script src="js/jquery.min.js"></script>
+  <script src="./dist/js/standalone/selectize.js"></script>
+  <script src="js/index.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDbJUBMk1sZD-XGvQFTt4VV-M10H4mZ1Ek",
+      authDomain: "healthfund-2d39b.firebaseapp.com",
+      databaseURL: "https://healthfund-2d39b.firebaseio.com",
+      storageBucket: "healthfund-2d39b.appspot.com",
+      messagingSenderId: "370511046282"
+    };
+    firebase.initializeApp(config);
+  </script>
+
+  <script>
+
+  function signOut(){
+      firebase.auth().signOut().then(function() {
+          console.log('Signed Out');
+      }, function(error) {
+          console.error('Sign Out Error', error);
+      });
+  }
+
+  function initApp() {
+    // Listening for auth state changes.
+    // [START authstatelistener]
+    firebase.auth().onAuthStateChanged(function(user) {
+      // [START_EXCLUDE silent]
+      // [END_EXCLUDE]
+      if (user) {
+        // User is signed in.
+        var userID = user.uid;
+        var email = user.email;
+        var userRef = firebase.database().ref('users/' + userID + '/projects').orderByKey();
 
 
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/stylesheet.css">
-    <link href="jquery-ui.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"> -->
-    <!-- <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
-    <!-- <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        var projectList = document.getElementById("div1");
 
-    <script src="js/jquery.min.js"></script>
-    <script src="./dist/js/standalone/selectize.js"></script>
-    <script src="js/index.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
-    <script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyDbJUBMk1sZD-XGvQFTt4VV-M10H4mZ1Ek",
-    authDomain: "healthfund-2d39b.firebaseapp.com",
-    databaseURL: "https://healthfund-2d39b.firebaseio.com",
-    storageBucket: "healthfund-2d39b.appspot.com",
-    messagingSenderId: "370511046282"
-};
-firebase.initializeApp(config);
-</script>
+        userRef.once("value")
+          .then(function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
 
-<script>
+              var projectID = childSnapshot.val();
+              
+              var projRef = firebase.database().ref('projects/' + projectID).orderByKey();
+              projRef.on('value', function(snapshot) {
+                var projectTitle = snapshot.child("title").val();
 
-    function signOut(){
-        firebase.auth().signOut().then(function() {
-            console.log('Signed Out');
-        }, function(error) {
-            console.error('Sign Out Error', error);
-        });
-    }
+                var x = document.createElement("LI");
+                var link = document.createElement("a");
+                var node = document.createTextNode(projectTitle);
 
+                link.href="#";
 
-     function initApp() {
-      // Listening for auth state changes.
-      // [START authstatelistener]
-      firebase.auth().onAuthStateChanged(function(user) {
-        // [START_EXCLUDE silent]
-        //document.getElementById('quickstart-verify-email').disabled = true;
-        // [END_EXCLUDE]
-        if (user) {
-          // User is signed in.
-          var displayName = user.displayName;
-          var email = user.email;
-          console.log(displayName + email);
-          writeUserData(uid,email,displayName);
-          // [START_EXCLUDE silent]
-          //document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
-          //document.getElementById('quickstart-sign-in').textContent = 'Sign out';
-          //document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
-          if (!emailVerified) {
-            //document.getElementById('quickstart-verify-email').disabled = false;
-        }
-          // [END_EXCLUDE]
+                x.appendChild(link);
+                link.appendChild(node);
+                projectList.appendChild(x);
+
+                /*
+
+                var para = document.createElement("a");
+                var node = document.createTextNode(projectTitle);
+
+                para.href="#";
+                
+                para.appendChild(node);
+                element.appendChild(para);
+                var br = document.createElement("BR");
+                element.insertBefore(br, node);*/
+
+              });
+
+          });
+        }); 
       } else {
           // User is signed out.
-          window.location.href = "../index.html";
-          // [START_EXCLUDE silent]
-          //document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
-          //document.getElementById('quickstart-sign-in').textContent = 'Sign in';
-          //document.getElementById('quickstart-account-details').textContent = 'null';
-          // [END_EXCLUDE]
+        window.location.href = "../index.html";
       }
         // [START_EXCLUDE silent]
-        //document.getElementById('quickstart-sign-in').disabled = false;
         // [END_EXCLUDE]
     });
       // [END authstatelistener]
-
-      document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
-      //document.getElementById('quickstart-sign-up').addEventListener('click', handleSignUp);
-      //document.getElementById('quickstart-verify-email').addEventListener('click', sendEmailVerification);
-      //document.getElementById('quickstart-password-reset').addEventListener('click', sendPasswordReset);
+    document.getElementById('quickstart-sign-out').addEventListener('click', signOut);
   }
 
-  function writeUserData(userId, email, fullname) {
-      firebase.database().ref('users/' + userId).set({
-        email: email,
-        displayName: fullname
-  });
-  }
+
 
 
   window.onload = function() {
@@ -165,8 +169,6 @@ firebase.initializeApp(config);
 
     <!-- Page Content -->
     <div class="container">
-
-        
         <!-- Page Header -->
         <div class="row">
             <div class="col-lg-12">
@@ -180,11 +182,8 @@ firebase.initializeApp(config);
         <div class="row">
             <div class="col-lg-12">
                 <center><a href="create.html"><div class="create">Create A New Project</div></a></center><br />
-                <ul>
-                    <li><a href="#">Finding a Cure for Batten Disease</a></li>
-                    <li><a href="#">Does Zika virus replicate in neural cells?</a></li>
-                    <li><a href="#">Mathematical model to reduce maternal and infant mortality in Southeast Asia</a></li>
-                    <li><a href="#">Affordable 3D-Printed Neural Devices for Spinal Cord Regeneration</a></li>
+
+                <ul id="div1">
                 </ul>
             </div>
         </div>
