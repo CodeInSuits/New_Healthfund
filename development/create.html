@@ -102,6 +102,7 @@
           var email = user.email;
           var userRef = firebase.database().ref('users/' + userID);
         } else {
+          window.location.href="../index.html";
         }
       });
       // [END authstatelistener]
